@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secret Date 😏</title>
+<title>Secret Date 😏🔥</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
@@ -13,18 +14,17 @@ body{
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #1c1c1c, #2b2b2b);
+  overflow:hidden;
   color:#fff;
   text-align:center;
-  overflow:hidden;
-  transition: background 0.5s;
 }
 h1{
   margin-bottom:40px;
-  font-size:2.2rem;
+  font-size:2.6rem;
   color:#ff6fa3;
-  text-shadow: 0 0 8px #ff6fa3;
+  text-shadow: 0 0 15px #ff6fa3;
 }
 button{
   padding:14px 28px;
@@ -33,19 +33,31 @@ button{
   border-radius:12px;
   cursor:pointer;
   margin:10px;
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 button:hover{
   transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(255,111,163,0.7);
+  box-shadow: 0 0 20px rgba(255,111,163,0.7);
 }
-#yes{background:#ff6fa3;color:#fff;}
+button#yes {
+  background:#ff6fa3;
+  color:#fff;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 rgba(255,111,163,0.5);}
+  50% { box-shadow: 0 0 25px rgba(255,111,163,0.8);}
+  100% { box-shadow: 0 0 0 rgba(255,111,163,0.5);}
+}
 #no{
   background:#444;color:#fff;
   position:absolute;
-  transition: left 0.5s ease, top 0.5s ease;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  min-width:60px; min-height:44px;
+  transition: left 0.4s ease-in-out, top 0.4s ease-in-out, transform 0.3s ease;
 }
-
 #page2{
   display:none;
   flex-direction: column;
@@ -53,13 +65,11 @@ button:hover{
   align-items: center;
   height: 100vh;
 }
-
 #page2 h1{
   color:#ff6fa3;
-  text-shadow: 0 0 10px #ff6fa3;
+  text-shadow: 0 0 18px #ff6fa3;
+  font-size:3rem;
 }
-
-/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -69,7 +79,6 @@ button:hover{
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.4s;
 }
 .modal-content {
   background:#222;
@@ -88,53 +97,65 @@ button:hover{
   50%{transform:scale(1.1);opacity:1}
   100%{transform:scale(1)}
 }
-@keyframes fadeIn {
-  from {opacity:0;}
-  to {opacity:1;}
+canvas.particles{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
 }
 </style>
 </head>
 <body>
+<canvas class="particles" id="particles"></canvas>
 
 <div id="page1">
-  <h1>Do you wanna have a Date with me?</h1>
+  <h1>یه دیتمون نشه بیبی؟</h1>
   <button id="yes">Yes</button>
   <button id="no">No</button>
 </div>
 
-<!-- Modal -->
 <div class="modal" id="noModal">
   <div class="modal-content">
     <img src="Spongi.jpg" alt="No Escape">
-    <p>راه فراری نیست 😏</p>
-    <button onclick="closeModal()">okay</button>
+    <p>😏 راه فراری نیست</p>
+    <button onclick="closeModal()">Okay</button>
   </div>
 </div>
 
 <div id="page2">
-  <h1>Good choice. 😉</h1>
+  <h1>Good choice 😉🔥</h1>
 </div>
 
+<audio id="noSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+
 <script>
+// Elements
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
 const noModal = document.getElementById('noModal');
+const noSound = document.getElementById("noSound");
 let noClickCount = 0;
 
-// حرکت دکمه No
+// Move No button
 function moveNo(){
   const padding = 20;
   const maxX = window.innerWidth - noBtn.offsetWidth - padding;
   const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-  const newX = Math.random() * maxX + padding;
-  const newY = Math.random() * maxY + padding;
+  const newX = Math.min(Math.random() * maxX, maxX);
+  const newY = Math.min(Math.random() * maxY, maxY);
   noBtn.style.left = `${newX}px`;
   noBtn.style.top = `${newY}px`;
+  noBtn.style.transform = `translate(-50%, -50%) rotate(${Math.random()*20-10}deg)`;
+
+  if(navigator.vibrate){ navigator.vibrate(50); }
+  noSound.play();
 }
 
-noBtn.addEventListener("mouseenter", () => {
+// Handle No click
+function handleNo(){
   noClickCount++;
   if(noClickCount >=4){
     noModal.style.display = 'flex';
@@ -142,28 +163,69 @@ noBtn.addEventListener("mouseenter", () => {
   } else {
     moveNo();
   }
-});
+}
 
+noBtn.addEventListener("mouseenter", handleNo);
 noBtn.addEventListener("touchstart", (e)=>{
   e.preventDefault();
-  noClickCount++;
-  if(noClickCount >=4){
-    noModal.style.display = 'flex';
-    noClickCount = 0;
+  handleNo();
+});
+
+// Modal
+function closeModal(){ noModal.style.display='none'; }
+noModal.addEventListener('click', (e)=>{ if(e.target===noModal) closeModal(); });
+noModal.addEventListener('touchend', (e)=>{ if(e.target===noModal) closeModal(); });
+
+// Yes button → SMS
+yesBtn.addEventListener("click",()=>{
+  const phone = "+989136939807";
+  const message = encodeURIComponent("Hi baby 😘🔥, I'll see you soon 💋.");
+  if(/Mobi|Android/i.test(navigator.userAgent)){
+    window.location.href = `sms:${phone}?body=${message}`;
   } else {
-    moveNo();
+    alert("این قابلیت فقط روی موبایل کار می‌کند 😏");
   }
 });
 
-function closeModal(){
-  noModal.style.display = 'none';
-}
+// Particle effect
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-// Yes → مستقیم واتساپ
-yesBtn.addEventListener("click",()=>{
-  const phone = "989136939807"; // شماره مقصد
-  const message = encodeURIComponent("Hi baby, I'll see you soon 💋.");
-  window.location.href = `https://wa.me/${phone}?text=${message}`;
+const particles = [];
+function createParticles(){
+  for(let i=0;i<50;i++){
+    particles.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height,
+      r: Math.random()*3+1,
+      dx: (Math.random()-0.5)*0.5,
+      dy: (Math.random()-0.5)*0.5,
+      color: `rgba(255,111,163,${Math.random()})`
+    });
+  }
+}
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x += p.dx;
+    p.y += p.dy;
+    if(p.x<0 || p.x>canvas.width) p.dx*=-1;
+    if(p.y<0 || p.y>canvas.height) p.dy*=-1;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+  });
+  requestAnimationFrame(animateParticles);
+}
+createParticles();
+animateParticles();
+
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
 </script>
 </body>
