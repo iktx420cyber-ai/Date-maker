@@ -3,229 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Secret Date 😏🔥</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<title>Question</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  position: relative;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #1c1c1c, #2b2b2b);
-  overflow:hidden;
-  color:#fff;
-  text-align:center;
-}
-h1{
-  margin-bottom:40px;
-  font-size:2.6rem;
-  color:#ff6fa3;
-  text-shadow: 0 0 15px #ff6fa3;
-}
-button{
-  padding:14px 28px;
-  font-size:18px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-  margin:10px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-button:hover{
-  transform: scale(1.1);
-  box-shadow: 0 0 20px rgba(255,111,163,0.7);
-}
-button#yes {
-  background:#ff6fa3;
-  color:#fff;
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 rgba(255,111,163,0.5);}
-  50% { box-shadow: 0 0 25px rgba(255,111,163,0.8);}
-  100% { box-shadow: 0 0 0 rgba(255,111,163,0.5);}
-}
-#no{
-  background:#444;color:#fff;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  min-width:60px; min-height:44px;
-  transition: left 0.4s ease-in-out, top 0.4s ease-in-out, transform 0.3s ease;
-}
-#page2{
-  display:none;
-  flex-direction: column;
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  font-family: sans-serif;
+  text-align: center;
+  overflow: hidden;
 }
-#page2 h1{
-  color:#ff6fa3;
-  text-shadow: 0 0 18px #ff6fa3;
-  font-size:3rem;
+h1 { color: #4a0033; font-size: 32px; }
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: absolute;
 }
+#yesBtn { background-color: #28a745; color: white; }
+#noBtn { background-color: #dc3545; color: white; }
+
+button:hover { transform: scale(1.1); }
+
 .modal {
   display: none;
   position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  background: rgba(0,0,0,0.85);
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 .modal-content {
-  background:#222;
-  padding:25px;
-  border-radius:15px;
-  text-align:center;
-  color:#fff;
-  animation: bounceIn 0.5s;
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  width: 280px;
+  animation: pop 0.3s ease;
 }
-.modal-content img {
-  width:120px;
-  margin-bottom:15px;
-}
-@keyframes bounceIn {
-  0%{transform:scale(0.5);opacity:0}
-  50%{transform:scale(1.1);opacity:1}
-  100%{transform:scale(1)}
-}
-canvas.particles{
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-}
+.modal-content img { width: 200px; border-radius: 10px; margin-top: 10px; }
+@keyframes pop { from { transform: scale(0.7); opacity:0; } to { transform: scale(1); opacity:1; } }
 </style>
 </head>
 <body>
-<canvas class="particles" id="particles"></canvas>
 
-<div id="page1">
-  <h1>یه دیتمون نشه بیبی؟</h1>
-  <button id="yes">Yes</button>
-  <button id="no">No</button>
-</div>
+<h1 id="mainText">Will you be mine? ❤️</h1>
+<button id="yesBtn">Yes</button>
+<button id="noBtn">No</button>
 
-<div class="modal" id="noModal">
+<div id="noModal" class="modal">
   <div class="modal-content">
-    <img src="Spongi.jpg" alt="No Escape">
-    <p>😏 راه فراری نیست</p>
-    <button onclick="closeModal()">Okay</button>
+    <h2>راه فراری نیست 😈</h2>
+    <img src="Spongi.jpg" alt="no escape"><br><br>
+    <button onclick="closeModal()">Okay 😅</button>
   </div>
 </div>
 
-<div id="page2">
-  <h1>Good choice 😉🔥</h1>
-</div>
-
-<audio id="noSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+<audio id="bgMusic" loop>
+  <source src="radiohead_-_jigsaw_falling_into_place.mp3" type="audio/mp3">
+</audio>
 
 <script>
-// Elements
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-const page1 = document.getElementById("page1");
-const page2 = document.getElementById("page2");
-const noModal = document.getElementById('noModal');
-const noSound = document.getElementById("noSound");
-let noClickCount = 0;
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const noModal = document.getElementById("noModal");
+const bgMusic = document.getElementById("bgMusic");
+let noCount = 0;
 
-// Move No button
-function moveNo(){
+// autoplay fix
+window.addEventListener("click", () => bgMusic.play().catch(()=>{}), {once:true});
+window.addEventListener("touchstart", () => bgMusic.play().catch(()=>{}), {once:true});
+
+// No button حرکت تصادفی
+function moveNo() {
   const padding = 20;
   const maxX = window.innerWidth - noBtn.offsetWidth - padding;
   const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-  const newX = Math.min(Math.random() * maxX, maxX);
-  const newY = Math.min(Math.random() * maxY, maxY);
+  let newX, newY;
+  do {
+    newX = Math.random() * maxX;
+    newY = Math.random() * maxY;
+  } while (
+    Math.abs(newX - yesBtn.offsetLeft) < 100 &&
+    Math.abs(newY - yesBtn.offsetTop) < 50
+  );
   noBtn.style.left = `${newX}px`;
   noBtn.style.top = `${newY}px`;
-  noBtn.style.transform = `translate(-50%, -50%) rotate(${Math.random()*20-10}deg)`;
-
-  if(navigator.vibrate){ navigator.vibrate(50); }
-  noSound.play();
 }
 
-// Handle No click
-function handleNo(){
-  noClickCount++;
-  if(noClickCount >=4){
-    noModal.style.display = 'flex';
-    noClickCount = 0;
-  } else {
-    moveNo();
-  }
+function clickNo() {
+  noCount++;
+  if(noCount >= 3){
+    noModal.style.display = "flex";
+    noCount = 0;
+  } else moveNo();
 }
 
-noBtn.addEventListener("mouseenter", handleNo);
-noBtn.addEventListener("touchstart", (e)=>{
-  e.preventDefault();
-  handleNo();
-});
+function closeModal() { noModal.style.display = "none"; }
 
-// Modal
-function closeModal(){ noModal.style.display='none'; }
-noModal.addEventListener('click', (e)=>{ if(e.target===noModal) closeModal(); });
-noModal.addEventListener('touchend', (e)=>{ if(e.target===noModal) closeModal(); });
-
-// Yes button → SMS
-yesBtn.addEventListener("click",()=>{
-  const phone = "+989136939807";
-  const message = encodeURIComponent("Hi baby 😘🔥, I'll see you soon 💋.");
-  if(/Mobi|Android/i.test(navigator.userAgent)){
-    window.location.href = `sms:${phone}?body=${message}`;
-  } else {
-    alert("این قابلیت فقط روی موبایل کار می‌کند 😏");
-  }
-});
-
-// Particle effect
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const particles = [];
-function createParticles(){
-  for(let i=0;i<50;i++){
-    particles.push({
-      x: Math.random()*canvas.width,
-      y: Math.random()*canvas.height,
-      r: Math.random()*3+1,
-      dx: (Math.random()-0.5)*0.5,
-      dy: (Math.random()-0.5)*0.5,
-      color: `rgba(255,111,163,${Math.random()})`
-    });
-  }
+function clickYes() {
+  document.body.innerHTML = "<h1 style='color:#1b5e20; margin-top:40vh;'>Good choice 😌</h1>";
+  setTimeout(()=>{ window.location.href = "sms:+989136939807"; }, 400);
 }
-function animateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach(p=>{
-    p.x += p.dx;
-    p.y += p.dy;
-    if(p.x<0 || p.x>canvas.width) p.dx*=-1;
-    if(p.y<0 || p.y>canvas.height) p.dy*=-1;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle = p.color;
-    ctx.fill();
-  });
-  requestAnimationFrame(animateParticles);
-}
-createParticles();
-animateParticles();
 
-window.addEventListener('resize',()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+// event listeners
+noBtn.addEventListener("mouseenter", clickNo);
+noBtn.addEventListener("touchstart", e=>{ e.preventDefault(); clickNo(); }, {passive:false});
+yesBtn.addEventListener("click", clickYes);
+
+// شروع موقعیت اولیه دکمه‌ها
+window.addEventListener("load", () => {
+  yesBtn.style.left = "40%";
+  yesBtn.style.top = "60%";
+  noBtn.style.left = "60%";
+  noBtn.style.top = "60%";
 });
 </script>
 </body>
